@@ -20,7 +20,6 @@ def search_file():
         main_root = ET.parse(tempfile).getroot()
         
         for item_class in main_root.findall(".//Item"):
-            
-            print(robloxutils.build_object_json(item_class))
+            item_json = robloxutils.build_object_json(item_class)
 
 search_file()

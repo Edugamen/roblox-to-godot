@@ -1,2 +1,0 @@
-﻿62162
-C:/Users/lalit/Godot/Editors/.editor_config/godot-project/Godot_v4.6.2-stable_mono_win64.exe
