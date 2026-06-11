@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://brwr7wpreo1eg"]
+
+[ext_resource type="Script" uid="uid://d160e7s71kc1n" path="res://placeholder_objects/scripts/object3d.gd" id="1_jvkdn"]
+[ext_resource type="Material" uid="uid://dia68jaec61ys" path="res://placeholder_objects/materials/default_material.material" id="2_pgri5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_673lm"]
+material = ExtResource("2_pgri5")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jvkdn"]
+
+[node name="Cube" type="Node3D" unique_id=799893504 node_paths=PackedStringArray("Collider", "MeshInstance")]
+script = ExtResource("1_jvkdn")
+Collider = NodePath("StaticBody3D/CollisionShape3D")
+MeshInstance = NodePath("MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=42506393]
+mesh = SubResource("BoxMesh_673lm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=372318072]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1589606627]
+shape = SubResource("BoxShape3D_jvkdn")
