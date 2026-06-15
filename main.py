@@ -1,25 +1,69 @@
-from tkinter import filedialog
+import os
+import platform
 import xml.etree.ElementTree as ET
 
-from sources.libraries import godotutils
-from sources.libraries import robloxutils
+from sources import sourcemap
+from sources import utilities
+from colorama import Fore, Style, init
 
-main_root = None
+## Variables
 
-def search_file():
-    global main_root
+opcion_choosed = 0
+system = platform.system()
 
-    tempfile = filedialog.askopenfile(
-        title="Open your roblox project file: ",
-        filetypes=[
-            ("Roblox file format: ", "*.rbxlx")
-        ]
-    )
+## Functions
 
-    if tempfile:
-        main_root = ET.parse(tempfile).getroot()
-        
-        for item_class in main_root.findall(".//Item"):
-            item_json = robloxutils.build_object_json(item_class)
+def clear_console():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:  # Linux y macOS
+        os.system("clear")
 
-search_file()
+def main_cycle_option():
+    clear_console()
+    print(f"""{Fore.MAGENTA}
+        ###############################################################################
+        #                                                                             #
+        #  █████████     ███████   █████████  ███         ███████    ███         ███  #
+        #  ███     ███ ███     ███ ███    ███ ███       ███     ███    ███     ███    #
+        #  ███     ███ ███     ███ █████████  ███       ███     ███      ███ ███      #
+        #  █████████   ███     ███ ███    ███ ███       ███     ███       █████       #
+        #  ███     ███ ███     ███ ███    ███ ███       ███     ███    ███     ███    #
+        #  ███     ███   ███████    ████████  █████████   ███████    ███         ███  #
+        #                                                                             #
+        #                        ███████████   █████                                  #
+        #                            ███     ███   ███                                #
+        #                            ███     ███   ███                                #
+        #                            ███     ███   ███                                #   
+        #                            ███       █████                                  #
+        #                                                                             #
+        #    ██████       ████████   █████████     ████████   ███████████████         #
+        #  ███     ███  ███      ███ ███     ███ ███      ███       ███               #
+        #  ███          ███      ███ ███     ███ ███      ███       ███               #
+        #  ███          ███      ███ ███     ███ ███      ███       ███               #
+        #  ███   █████  ███      ███ ███     ███ ███      ███       ███               #
+        #  ███      ███ ███      ███ ███     ███ ███      ███       ███               #
+        #    ████████     ████████   █████████     ████████         ███               #
+        #                                                                             #    
+        #                                                                             #                                                            
+        #                                                                             #    
+        ###############################################################################
+                              Created by DevEdugamen  ({utilities.get_version()})              
+            
+
+    {Fore.RESET}""")
+
+    print("Small program converting roblox place to a godot project semi-completly")
+
+## Main
+
+
+main_cycle_option()
+utilities.get_version()
+
+
+# print("[1] - Choose the file .rbxlx ")
+# search_file()
+
+# print("\n\n[2] - Insert a name for the project")
+# main_project_name = str(input("Project Name: "))
