@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://vf4it2w8mjl7"]
-
-[ext_resource type="PackedScene" uid="uid://brwr7wpreo1eg" path="res://placeholder_objects/cube.tscn" id="1_uhqqe"]
-
-[node name="Node3D" type="Node3D" unique_id=393877607]
-
-[node name="Cube" parent="." unique_id=799893504 instance=ExtResource("1_uhqqe")]
-transform = Transform3D(0.055542707, 0, -0.9984564, 0, 1, 0, 0.9984564, 0, 0.055542707, 1.8305506, 0, 0)
-ObjectColor = Color(1, 1, 1, 1)
