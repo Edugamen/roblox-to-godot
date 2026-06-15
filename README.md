@@ -1,3 +1,8 @@
-CURRENTLY ON DEVELOPMENT. 
+<p align="center">
+  <img src="https://file.garden/ah-IfBJprgbmQbcw/wawawwaawawgodotroblox.png" style="width: 100%">
+</p>
 
-Idea: pass roblox workspace place by .rbxlx file to completly godot project
+## Information
+Roblox to Godot. it's a repository about transform roblox workspace place. to complete a godot engine project!
+
+## UNDER DEVELOPMENT. NO DAY RELEASE YET
