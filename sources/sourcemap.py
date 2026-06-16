@@ -14,8 +14,10 @@ main_json = {
 }
 
 main_export_path = None
-main_project_name = "Test Project"
+main_project_name = "A named project"
 main_version_project = 0
+
+override_project_name = None
 
 ## Variables
 
@@ -69,6 +71,15 @@ def search_export_project():
     if main_export_path:
         print(main_export_path)
 
+def set_project_version(version):
+    global main_version_project
+
+    if version not in valid_godot_versions:
+        print("NOP")
+        return
+    
+    main_version_project = version
+
 ## Utils
 
 def get_roblox_file_name():
@@ -77,11 +88,14 @@ def get_roblox_file_name():
     
     return str(os.path.splitext(os.path.basename(main_file.name))[0])
 
+def ready_to_build():
+    return has_roblox_file() and has_project_export() and has_version_selected()
+
 def has_roblox_file():
-    return main_file != None
+    return main_file is not None
 
 def has_project_export():
-    return main_export_path != None
+    return main_export_path is not None
 
 def has_version_selected():
     if main_version_project not in valid_godot_versions:

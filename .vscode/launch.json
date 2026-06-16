@@ -6,6 +6,12 @@
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Build Project",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "pyinstaller build-project-pyinstaller.spec --clean"
         }
     ]
 }

@@ -128,9 +128,11 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.test
 .env
 .godot
 .venv
+Test/
 env/
 venv/
 ENV/

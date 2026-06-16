@@ -9,6 +9,7 @@ from colorama import Fore, Style, init
 
 ## Variables
 
+message = ""
 opcion_choosed = 0
 system = platform.system()
 
@@ -20,7 +21,79 @@ def clear_console():
     else:  # Linux y macOS
         os.system("clear")
 
+def misc_cycle_option():
+    global message
+    global opcion_choosed
+
+    ## Resetiing variables
+    message = ""
+    opcion_choosed = 0
+
+    ## Cleanning console log. to much better on visuals lol
+    clear_console()
+
+    print("""
+    #############################################################
+    #                                                           #
+    #   ████      ████  ████████████  ██████████    ████████    #
+    #   ██  ██  ██  ██       ██       ██          ██            #
+    #   ██    ██    ██       ██       ██████████  ██            #
+    #   ██          ██       ██               ██  ██            #
+    #   ██          ██  ████████████  ██████████    ████████    #
+    #                                                           #
+    #############################################################
+    """)
+
+    # Override Project Name
+    message = "[1] - Override Project Name: "
+    if sourcemap.has_roblox_file():
+        if sourcemap.override_project_name:
+            message += f"{Fore.GREEN}{sourcemap.override_project_name}{Fore.RESET}"
+        else:
+            message += f"{Fore.YELLOW}{sourcemap.get_roblox_file_name()} (its the name by default on the .rbxlx file) you can still change it{Fore.RESET}"
+    else:
+        message += f"{Fore.RED}YOU CANNOT OVERRIDE THE PROJECT NAME UNTIL YOU OPEN A .RBLXL FILE{Fore.RESET}"
+
+    print(message)
+
+    if sourcemap.has_roblox_file() and sourcemap.override_project_name is not None:
+        print("[2]: Reset project Name")
+
+    # Return back to main
+    if sourcemap.override_project_name is not None:
+        print("[3]: Go back to Main")
+    else:
+        print("[2]: Go back to Main")
+
+    while True:
+        opcion_choosed = int(input("Choose a opcion: "))
+
+        match opcion_choosed:
+            case 1:
+                if sourcemap.has_roblox_file():
+                    temp_override_name = str(input("Insert a name to override the project name: "))
+                    sourcemap.override_project_name = temp_override_name
+
+                    misc_cycle_option()
+                    break
+            case 2:
+                if sourcemap.has_roblox_file() and sourcemap.override_project_name is not None:
+                    sourcemap.override_project_name = None
+                    print("Removed")
+                    time.sleep(1.1)
+
+                    misc_cycle_option()
+                    break
+                else:
+                    main_cycle_option()
+                    break
+            case _:
+                print("UNKNOW OPCION")
+
 def main_cycle_option():
+    global opcion_choosed
+    global message 
+    
     clear_console()
     print(f"""{Fore.MAGENTA}
         ###############################################################################
@@ -49,36 +122,61 @@ def main_cycle_option():
         #                                                                             #                                                            
         #                                                                             #    
         ###############################################################################
-                              Created by DevEdugamen  ({utilities.get_version()})              
+                          Created by DevEdugamen  git-version ({utilities.get_version()})              
             
 
     {Fore.RESET}""")
     print("Small program converting roblox place to a godot project semi-completly")
     print("Please choose an option to configurate...\n")
 
+    message = "" # Cleening up the message
+
     # Place File
-    message = f"{Fore.RED} File doesnt exist {Fore.RESET}"
+    message = f"{Fore.RED} File doesnt exist {Fore.RESET}" ## Setting by default file doesnt choosed
     if sourcemap.has_roblox_file():
-        message = f"{Fore.GREEN}{sourcemap.get_roblox_file_name()}.rbxlx{Fore.RESET}"
+        message = f"{Fore.GREEN}{sourcemap.get_roblox_file_name()}.rbxlx{Fore.RESET}" ## Incase we open the .rbxlx file. showing the name
     
     print(f"[1] - Roblox File: {message}")
 
     # Exported Project
-    message = f"{Fore.RED} Project Folder doesnt choosed {Fore.RESET}"
+    message = f"{Fore.RED} Project Folder doesnt choosed {Fore.RESET}" ## Cleening up and showing a error we doesnt choosed a export folder path
     if sourcemap.has_project_export():
-        message = f"{Fore.GREEN}{sourcemap.main_export_path}{Fore.RESET}"
+        message = f"{Fore.GREEN}{sourcemap.main_export_path}{Fore.RESET}" ## In case we selected a folder. showing the path
     
     print(f"[2] - Project Export Folder: {message}")
 
     # Godot Version
-    message = f"{Fore.RED} Version no choosed yet. {Fore.RESET}"
+    message = f"{Fore.RED} Version no choosed yet. {Fore.RESET}" ## Cleening up and making message for the godot project version
     if sourcemap.has_version_selected():
-        message = f"{Fore.GREEN}{sourcemap.main_export_path}{Fore.RESET}"
+        message = f"{Fore.GREEN}{sourcemap.main_version_project}{Fore.RESET}" ## In case we choosed a version. showing the version
     
     print(f"[3] - Project Version: {message}")
 
-    print("[4] - Exit")
+    # Build project
+    message = "[4] - " ## Rewriting the message. i dont use more variables just for a visual thing so i use one variable for everything.
+    if sourcemap.ready_to_build():
+        message += f"{Fore.GREEN}¡Build Project!{Fore.RESET}"
+    else:
+        message += f"{Fore.RED}Missing Steps to build the project{Fore.RESET}"
 
+        if not sourcemap.has_roblox_file():
+            message += f"\n     {Fore.RED}[x]: Missing roblox file{Fore.RESET}"
+            
+        if not sourcemap.has_project_export():
+            message += f"\n     {Fore.RED}[x]: Missing export folder path{Fore.RESET}"
+            
+        if not sourcemap.has_version_selected():
+            message += f"\n     {Fore.RED}[x]: Missing version selected{Fore.RESET}"
+
+    print(message)
+
+    # Misc
+    print("[5] - Misc")
+
+    # Exit
+    print("[6] - Exit")
+
+    # Cycle loop for the opcions
     while True:
         opcion_choosed = int(input("Choose a opcion: "))
 
@@ -86,7 +184,7 @@ def main_cycle_option():
         match opcion_choosed:
             case 1:
                 sourcemap.search_file()
-                time.sleep(4.0)
+                time.sleep(3.25)
                 main_cycle_option()
                 break
             case 2:
@@ -94,8 +192,31 @@ def main_cycle_option():
                 main_cycle_option()
                 break
             case 3:
-                pass
+                temp_version = float(input("Select Godot Project Version: "))
+                if temp_version not in sourcemap.valid_godot_versions:
+                    raise ValueError(
+                        "Unsopported Godot Version"
+                    )
+                
+                sourcemap.set_project_version(temp_version)
+                main_cycle_option()
+                temp_version = None
+                break
             case 4:
+                if not sourcemap.ready_to_build():
+                    print(f"{Fore.RED}[x] ERROR:{Fore.RESET} the project its not ready to build. PLEASE check the requirements")
+                    time.sleep(4.2)
+                    main_cycle_option()
+                    break
+                    
+                print("Building")
+                time.sleep(3)
+                main_cycle_option()
+                break
+            case 5:
+                misc_cycle_option()
+                break
+            case 6:
                 break
 
             case _:
@@ -106,11 +227,4 @@ def main_cycle_option():
 
 ## Main
 
-
 main_cycle_option()
-
-# print("[1] - Choose the file .rbxlx ")
-# search_file()
-
-# print("\n\n[2] - Insert a name for the project")
-# main_project_name = str(input("Project Name: "))
