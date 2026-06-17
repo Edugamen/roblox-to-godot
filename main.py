@@ -3,9 +3,10 @@ import time
 import platform
 import xml.etree.ElementTree as ET
 
+from sources import build
 from sources import sourcemap
 from sources import utilities
-from colorama import Fore, Style, init
+from colorama import Fore
 
 ## Variables
 
@@ -66,19 +67,24 @@ def misc_cycle_option():
         print("[2]: Go back to Main")
 
     while True:
-        opcion_choosed = int(input("Choose a opcion: "))
+        try:
+            opcion_choosed = int(input("Choose an option: "))
+        except ValueError:
+            print("Invalid option")
+            continue
 
         match opcion_choosed:
             case 1:
                 if sourcemap.has_roblox_file():
                     temp_override_name = str(input("Insert a name to override the project name: "))
-                    sourcemap.override_project_name = temp_override_name
+                    sourcemap.set_project_name(temp_override_name)
 
                     misc_cycle_option()
                     break
             case 2:
                 if sourcemap.has_roblox_file() and sourcemap.override_project_name is not None:
-                    sourcemap.override_project_name = None
+                    sourcemap.set_project_name(None)
+                    
                     print("Removed")
                     time.sleep(1.1)
 
@@ -87,6 +93,12 @@ def misc_cycle_option():
                 else:
                     main_cycle_option()
                     break
+            case 3:
+                if sourcemap.has_roblox_file() and sourcemap.override_project_name is not None:
+                    main_cycle_option()
+                    break
+                else:
+                    pass
             case _:
                 print("UNKNOW OPCION")
 
@@ -178,7 +190,11 @@ def main_cycle_option():
 
     # Cycle loop for the opcions
     while True:
-        opcion_choosed = int(input("Choose a opcion: "))
+        try:
+            opcion_choosed = int(input("Choose an option: "))
+        except ValueError:
+            print("Invalid option")
+            continue
 
         clear_console()
         match opcion_choosed:
@@ -209,7 +225,8 @@ def main_cycle_option():
                     main_cycle_option()
                     break
                     
-                print("Building")
+                print("Building...")
+                build.build_by_step()
                 time.sleep(3)
                 main_cycle_option()
                 break

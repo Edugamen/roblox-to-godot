@@ -1,4 +1,5 @@
 import os
+import time
 import xml.etree.ElementTree as ET
 from colorama import Fore
 from tkinter import filedialog
@@ -18,6 +19,11 @@ main_project_name = "A named project"
 main_version_project = 0
 
 override_project_name = None
+
+build_steps = [
+    "Creating project",
+    "Finished"
+]
 
 ## Variables
 
@@ -46,10 +52,19 @@ def search_file():
 
         count = 0
         main_root = ET.parse(main_file).getroot()
+        main_json["Objects"] = []
         
-        for item_class in main_root.findall(".//Item"):
+        items = main_root.findall(".//Item")
+        total = len(items)
+
+        for index, item_class in enumerate(items, start=1):
+            print(f"[{index}/{total}] Processing {item_class.get('class')}")
+            time.sleep(0.25)
+
+        time.sleep(1)
+        for item_class in items:
             item_json = robloxutils.build_object_json(item_class)
-            print(f"[{item_class.get("class")}]: Trying to converting to JSON...")
+            print(f"[{item_class.get('class')}]: Trying to converting to JSON...")
             if item_json is None:
                 print(f"{Fore.RED}[{item_class.get("class")}]: Object/Class doesnt sopport yet!.{Fore.RESET}")
                 continue
@@ -58,7 +73,8 @@ def search_file():
             count += 1
 
             print(f"{Fore.GREEN}[{item_class.get("class")}]: Exported item: {count}{Fore.RESET}")
-        
+            time.sleep(0.25)
+
         print(f"\n{Fore.GREEN}Items exported [{count}]{Fore.RESET}")
 
 def search_export_project():
@@ -80,6 +96,9 @@ def set_project_version(version):
     
     main_version_project = version
 
+def build_project():
+    pass
+
 ## Utils
 
 def get_roblox_file_name():
@@ -87,6 +106,16 @@ def get_roblox_file_name():
         return ""
     
     return str(os.path.splitext(os.path.basename(main_file.name))[0])
+
+def get_project_name():
+    if override_project_name:
+        return override_project_name
+
+    return get_roblox_file_name()
+
+def set_project_name(name):
+    global override_project_name
+    override_project_name = name
 
 def ready_to_build():
     return has_roblox_file() and has_project_export() and has_version_selected()

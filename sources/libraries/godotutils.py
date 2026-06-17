@@ -90,6 +90,21 @@ def exist_project_file(path, project_name):
         (project_path / "project.godot").exists()
     )
 
+def delete_project():
+    global project_file
+
+    if project_file is None:
+        return False
+
+    if not project_file.exists():
+        project_file = None
+        return False
+
+    shutil.rmtree(project_file)
+
+    project_file = None
+    return True
+
 ## Misc
 def get_available_project_name(path, project_name):
     base_path = Path(path)
