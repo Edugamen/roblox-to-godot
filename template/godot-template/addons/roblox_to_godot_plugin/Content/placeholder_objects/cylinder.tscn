@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://de6pajn44qdds"]
 
-[ext_resource type="Script" uid="uid://d160e7s71kc1n" path="res://placeholder_objects/scripts/object3d.gd" id="1_0ffss"]
-[ext_resource type="Material" uid="uid://dia68jaec61ys" path="res://placeholder_objects/materials/default_material.material" id="2_vg86r"]
+[ext_resource type="Script" uid="uid://d160e7s71kc1n" path="res://addons/roblox_to_godot_plugin/Content/scripts/object3d.gd" id="1_0ffss"]
+[ext_resource type="Material" uid="uid://b2x41k8xl0o6m" path="res://addons/roblox_to_godot_plugin/Content/materials/default_material.tres" id="2_306e0"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_g1hvh"]
 height = 1.0
@@ -13,10 +13,9 @@ height = 1.0
 script = ExtResource("1_0ffss")
 Collider = NodePath("StaticBody3D/CollisionShape3D")
 MeshInstance = NodePath("MeshInstance3D")
-ObjectColor = null
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=42506393]
-material_overlay = ExtResource("2_vg86r")
+material_override = ExtResource("2_306e0")
 mesh = SubResource("CylinderMesh_g1hvh")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=372318072]

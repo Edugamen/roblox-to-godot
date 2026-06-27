@@ -62,18 +62,29 @@ blacklist_class = [
     "Workspace", ## This is the main one. so we not need him for now
 ]
 
+current_id = 0
+
 ## Functions
-def build_object_json(data):
+def build_object_json(data, parent_id=0):
     if data is None:
         return None
-    
-    if data.get("class") in blacklist_class or data.get("class").endswith("Service"):
+
+    if (
+        data.get("class") in blacklist_class
+        or data.get("class", "").endswith("Service")
+    ):
         return None
 
+    object_id = generate_id()
+
     object_json = {
-        "name": search_property("Name", data),
-        "class": data.get("class"),
-        "properties": {}
+        "Id": object_id,
+        "ParentId": parent_id,
+
+        "Name": search_property("Name", data),
+        "ClassType": data.get("class"),
+
+        "Properties": {}
     }
 
     properties = data.find("Properties")
@@ -83,9 +94,27 @@ def build_object_json(data):
             if is_property_blacklisted(prop):
                 continue
 
-            object_json["properties"][prop.get("name")] = prop.text
+            object_json["Properties"][prop.get("name")] = prop.text
 
     return object_json
+
+def export_item(item, parent_id=0, output=None):
+    if output is None:
+        output = []
+
+    obj = build_object_json(item, parent_id)
+
+    if obj is None:
+        return output
+
+    output.append(obj)
+
+    my_id = obj["Id"]
+
+    for child in item.findall("Item"):
+        export_item(child, my_id, output)
+
+    return output
 
 def search_property(name, item):
     if item is None:
@@ -98,6 +127,12 @@ def search_property(name, item):
     return None
 
 ## Utils
+def generate_id():
+    global current_id
+
+    current_id += 1
+    return current_id
+
 def is_property_blacklisted(property) -> bool:
     return property.get("name") in blacklist_properties
 

@@ -1,27 +1,13 @@
 import os
 import time
 import xml.etree.ElementTree as ET
-from colorama import Fore
 from tkinter import filedialog
+from colorama import Fore
 
-from sources.libraries import godotutils
 from sources.libraries import robloxutils
 
-## Main variables
-main_file = None
-main_root = None
-main_json = { 
-    "Objects": [],
-}
-
-main_export_path = None
-main_project_name = "A named project"
-main_version_project = 0
-
-override_project_name = None
-
 build_steps = [
-    "Creating project",
+    "Creating base project",
     "Finished"
 ]
 
@@ -33,71 +19,66 @@ valid_godot_versions = [
     4.6,
 ]
 
+## Class
+
+class ExportState:
+    def __init__(self):
+        self.file = None
+        self.root = None
+        self.json = {"Objects": []}
+        self.export_path = None
+        self.project_name = "Unnamed project"
+        self.version = None
+
+state = ExportState()
+
 ## Functions
 def search_file():
-    global main_root
-    global main_file
-    global main_json
-
-    main_file = filedialog.askopenfile(
-        title="Open your roblox project file: ",
-        filetypes=[
-            ("Roblox file format: ", "*.rbxlx")
-        ]
+    state.file = filedialog.askopenfile(
+        title="Open Roblox project",
+        filetypes=[("Roblox file format", "*.rbxlx")]
     )
 
-    if main_file:
-        print(f"Choosed file: {os.path.splitext(os.path.basename(main_file.name))[0]}.rbxlx")
-        print("Exporting Items...")
+    if not state.file:
+        return
 
-        count = 0
-        main_root = ET.parse(main_file).getroot()
-        main_json["Objects"] = []
-        
-        items = main_root.findall(".//Item")
-        total = len(items)
+    print(f"Loaded: {os.path.basename(state.file.name)}")
 
-        for index, item_class in enumerate(items, start=1):
-            print(f"[{index}/{total}] Processing {item_class.get('class')}")
-            time.sleep(0.25)
+    state.root = ET.parse(state.file).getroot()
+    state.json["Objects"] = []
 
-        time.sleep(1)
-        for item_class in items:
-            item_json = robloxutils.build_object_json(item_class)
-            print(f"[{item_class.get('class')}]: Trying to converting to JSON...")
-            if item_json is None:
-                print(f"{Fore.RED}[{item_class.get("class")}]: Object/Class doesnt sopport yet!.{Fore.RESET}")
-                continue
+    items = state.root.findall(".//Item")
+    total = len(items)
 
-            main_json["Objects"].append(item_json)
-            count += 1
+    print(f"Found {total} objects")
+    print("Converting...\n")
 
-            print(f"{Fore.GREEN}[{item_class.get("class")}]: Exported item: {count}{Fore.RESET}")
-            time.sleep(0.25)
+    for i, item in enumerate(items, start=1):
+        print(f"[{i}/{total}] {item.get('class')}")
 
-        print(f"\n{Fore.GREEN}Items exported [{count}]{Fore.RESET}")
+        obj = robloxutils.build_object_json(item)
+
+        if obj is None:
+            continue
+
+        state.json["Objects"].append(obj)
+
+    print(f"\n{Fore.GREEN}Converted: {len(state.json['Objects'])}{Fore.RESET}")
 
 def search_export_project():
-    global main_export_path
-
-    main_export_path = filedialog.askdirectory(
-        title="Select a dictionary to save the project files"
+    state.export_path = filedialog.askdirectory(
+        title="Select export folder"
     )
 
-    if main_export_path:
-        print(main_export_path)
+    if state.export_path:
+        print("Export path:", state.export_path)
 
 def set_project_version(version):
-    global main_version_project
-
     if version not in valid_godot_versions:
-        print("NOP")
+        print("GODOT VERSION NOT AVARIABLE OR NON-EXIST")
         return
     
-    main_version_project = version
-
-def build_project():
-    pass
+    state.version = version
 
 ## Utils
 
@@ -105,7 +86,7 @@ def get_roblox_file_name():
     if not has_roblox_file():
         return ""
     
-    return str(os.path.splitext(os.path.basename(main_file.name))[0])
+    return str(os.path.splitext(os.path.basename(state.file.name))[0])
 
 def get_project_name():
     if override_project_name:
@@ -117,17 +98,19 @@ def set_project_name(name):
     global override_project_name
     override_project_name = name
 
+
 def ready_to_build():
-    return has_roblox_file() and has_project_export() and has_version_selected()
+    return all([
+        state.file,
+        state.export_path,
+        state.version in valid_godot_versions
+    ])
 
 def has_roblox_file():
-    return main_file is not None
+    return state.file is not None
 
 def has_project_export():
-    return main_export_path is not None
+    return state.export_path is not None
 
 def has_version_selected():
-    if main_version_project not in valid_godot_versions:
-        return False
-
-    return True
+    return state.version in valid_godot_versions

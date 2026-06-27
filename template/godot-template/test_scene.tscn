@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://vf4it2w8mjl7"]
 
-[ext_resource type="PackedScene" uid="uid://brwr7wpreo1eg" path="res://placeholder_objects/cube.tscn" id="1_uhqqe"]
+[ext_resource type="PackedScene" uid="uid://brwr7wpreo1eg" path="res://addons/roblox_to_godot_plugin/Content/placeholder_objects/cube.tscn" id="1_uhqqe"]
 
 [node name="Node3D" type="Node3D" unique_id=393877607]
 

@@ -29,7 +29,13 @@ func check_settings():
 		return
 	
 	Collider.disabled = not can_collide
-	print(MeshInstance.material_overlay)
+	if MeshInstance.material_override:
+		if !MeshInstance.material_override.resource_local_to_scene:
+			var mat = MeshInstance.material_override.duplicate()
+			mat.resource_local_to_scene = true
+			MeshInstance.material_override = mat
+
+		MeshInstance.material_override.albedo_color = ObjectColor
 
 func check_meshintance() -> bool:
 	var found_it = false

@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://brwr7wpreo1eg"]
 
-[ext_resource type="Script" uid="uid://d160e7s71kc1n" path="res://placeholder_objects/scripts/object3d.gd" id="1_jvkdn"]
-[ext_resource type="Material" uid="uid://dia68jaec61ys" path="res://placeholder_objects/materials/default_material.material" id="2_pgri5"]
+[ext_resource type="Script" uid="uid://d160e7s71kc1n" path="res://addons/roblox_to_godot_plugin/Content/scripts/object3d.gd" id="1_jvkdn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60j0d"]
+resource_local_to_scene = true
+albedo_color = Color(0.53649503, 0.6044893, 0.79093385, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_673lm"]
 
@@ -11,10 +14,10 @@
 script = ExtResource("1_jvkdn")
 Collider = NodePath("StaticBody3D/CollisionShape3D")
 MeshInstance = NodePath("MeshInstance3D")
-ObjectColor = null
+ObjectColor = Color(0.53649503, 0.6044893, 0.79093385, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=42506393]
-material_overlay = ExtResource("2_pgri5")
+material_override = SubResource("StandardMaterial3D_60j0d")
 mesh = SubResource("BoxMesh_673lm")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=372318072]

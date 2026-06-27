@@ -118,8 +118,3 @@ def get_available_project_name(path, project_name):
         counter += 1
 
     return f"{project_name}_{counter}"
-
-def generate_uid():
-    uid = random.getrandbits(64)
-    uid_bytes = uid.to_bytes(8, "big")
-    return base64.b32encode(uid_bytes).decode().lower().rstrip("=")
